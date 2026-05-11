@@ -1,11 +1,12 @@
 import tkinter as tk
 from tkinter import messagebox
+# 1. Import the history function
+from Back_end.database import save_to_history 
 
-def load_drug_dose_ui(root, canvas, on_return):
+# 2. Add 'current_user' to the arguments
+def load_drug_dose_ui(root, canvas, on_return, current_user):
     """
-    root: The main Tk window
-    canvas: The shared canvas
-    on_return: Function to go back to the Selection Menu
+    current_user: The username of the person logged in
     """
     canvas.delete("all")
 
@@ -35,9 +36,24 @@ def load_drug_dose_ui(root, canvas, on_return):
             total_dose = dose_per_kg * weight
             volume_to_give = (total_dose / stock_mg) * stock_ml
             
+            # Formatting results
+            res_dose = f"{total_dose:.2f} mg"
+            res_vol = f"{volume_to_give:.2f} mL"
+
             # Update result labels
-            label_total_dose.config(text=f"{total_dose:.2f} mg", fg="black")
-            label_volume.config(text=f"{volume_to_give:.2f} mL", fg="black")
+            label_total_dose.config(text=res_dose, fg="black")
+            label_volume.config(text=res_vol, fg="black")
+
+            # --- 3. SAVE TO HISTORY ---
+            input_summary = f"Dose:{dose_per_kg}mg/kg, Wt:{weight}kg, Stock:{stock_mg}mg/{stock_ml}mL"
+            result_summary = f"Total: {res_dose} | Give: {res_vol}"
+            
+            save_to_history(
+                current_user, 
+                "Drug Dose", 
+                input_summary, 
+                result_summary
+            )
             
         except ValueError:
             messagebox.showerror("Invalid Input", "Please enter valid numbers.")

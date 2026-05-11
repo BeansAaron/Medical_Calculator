@@ -1,11 +1,12 @@
 import math
 from tkinter import Entry, Button, Label
+# 1. Import the history function
+from Back_end.database import save_to_history 
 
-def load_iv_flow_ui(root, canvas, on_return_click):
+# 2. Add current_user to the arguments
+def load_iv_flow_ui(root, canvas, on_return_click, current_user):
     """
-    root: The main Tk window
-    canvas: The shared canvas from main.py
-    on_return_click: The function to go back to the selection menu
+    current_user: The username of the person logged in
     """
     # 1. Clear previous screen
     canvas.delete("all")
@@ -29,7 +30,7 @@ def load_iv_flow_ui(root, canvas, on_return_click):
     entry_time = Entry(root, bd=0, bg="#D9D9D9", justify="left", font=("Arial", 14))
     entry_time.place(x=25.0, y=230.0, width=200.0, height=35.0)
 
-    # --- Result Labels (Created before the function so it can find them) ---
+    # --- Result Labels ---
     result_df20 = Label(root, text="0.00", bg="#D9D9D9", font=("Arial", 14), anchor="center")
     result_df20.place(x=25.0, y=420.0, width=170.0, height=40.0)
 
@@ -48,6 +49,18 @@ def load_iv_flow_ui(root, canvas, on_return_click):
             
             result_df20.config(text=f"{res_20:.2f}")
             result_df60.config(text=f"{res_60:.2f}")
+
+            # --- 3. SAVE TO HISTORY ---
+            input_summary = f"Vol: {vol}mL, Time: {time}hrs"
+            result_summary = f"DF20: {res_20} | DF60: {res_60}"
+            
+            save_to_history(
+                current_user, 
+                "IV Flow Rate", 
+                input_summary, 
+                result_summary
+            )
+
         except (ValueError, ZeroDivisionError):
             result_df20.config(text="Error")
             result_df60.config(text="Error")

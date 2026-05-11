@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
 import math
+# 1. IMPORT the history function
+from Back_end.database import save_to_history 
 
-def load_titration_ui(root, canvas, on_return):
+# 2. ADD 'current_user' to the arguments
+def load_titration_ui(root, canvas, on_return, current_user):
     """
-    root: The main Tk window from main.py
-    canvas: The shared canvas
-    on_return: Function to go back to the Selection Menu
+    current_user: The username of the person logged in
     """
     canvas.delete("all")
 
@@ -15,18 +16,28 @@ def load_titration_ui(root, canvas, on_return):
         try:
             dose = float(entry_dose.get())
             weight = float(entry_weight.get())
-            selection = titration_var.get().lower()
+            selection = titration_var.get()
      
             result = 0.0
 
-            if selection == "dopamine":
+            if selection.lower() == "dopamine":
                 # Formula: (Dose * Weight) / 13.3
                 result = math.ceil((dose * weight) / 13.3)
-            elif selection == "dobutamine":
+            elif selection.lower() == "dobutamine":
                 # Formula: (Dose * Weight) / 16.6
                 result = math.ceil((dose * weight) / 16.6)
-                
-            result_label.config(text=f"{result} gtts/min", fg="black")
+            
+            result_text = f"{result} gtts/min"
+            result_label.config(text=result_text, fg="black")
+
+            # --- 3. SAVE TO HISTORY ---
+            input_summary = f"Dose: {dose}, Wt: {weight}kg"
+            save_to_history(
+                current_user,           # Who did it
+                f"Titration ({selection})", # Type of calc
+                input_summary,          # Inputs used
+                result_text             # Final result
+            )
             
         except ValueError:
             result_label.config(text="Invalid Input", fg="red")
@@ -94,6 +105,6 @@ def load_titration_ui(root, canvas, on_return):
         bg="#5F1C1C", 
         fg="white", 
         font=("Arial", 14), 
-        command=on_return # This calls self.show_menu in main.py
+        command=on_return 
     )
     btn_return.place(x=25.0, y=580.0, width=140.0, height=40.0)

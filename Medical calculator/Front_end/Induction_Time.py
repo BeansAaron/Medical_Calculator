@@ -1,11 +1,12 @@
 import tkinter as tk
 from tkinter import messagebox
+# 1. Import the history function
+from Back_end.database import save_to_history 
 
-def load_infusion_time_ui(root, canvas, on_return):
+# 2. Add 'current_user' to the arguments
+def load_infusion_time_ui(root, canvas, on_return, current_user):
     """
-    root: The main Tk window
-    canvas: The shared canvas
-    on_return: Function to go back to the Selection Menu
+    current_user: The username of the person logged in
     """
     # 1. Clear the canvas
     canvas.delete("all")
@@ -29,9 +30,19 @@ def load_infusion_time_ui(root, canvas, on_return):
             
             # Formula: Time = Volume / Rate
             time_result = volume / rate
+            result_text = f"{time_result:.2f} hours"
             
             # Update result label
-            label_result.config(text=f"{time_result:.2f} hours", fg="black")
+            label_result.config(text=result_text, fg="black")
+
+            # --- 3. SAVE TO HISTORY ---
+            input_summary = f"Vol: {volume}mL, Rate: {rate}mL/hr"
+            save_to_history(
+                current_user, 
+                "Infusion Time", 
+                input_summary, 
+                result_text
+            )
             
         except ValueError:
             messagebox.showerror("Invalid Input", "Please enter valid numbers.")

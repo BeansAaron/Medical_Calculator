@@ -1,22 +1,21 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import sys
-import os
 from pathlib import Path
+# 1. Import the history function
+from Back_end.database import save_to_history 
 
 if getattr(sys, 'frozen', False):
-    # This is where PyInstaller puts your assets in the EXE
     BASE_PATH = Path(sys._MEIPASS)
 else:
     BASE_PATH = Path(__file__).parent
 
 ASSETS_PATH = BASE_PATH / "assets"
 
-def load_conversion_ui(root, canvas, on_return):
+# 2. Add 'current_user' to the arguments
+def load_conversion_ui(root, canvas, on_return, current_user):
     """
-    root: The main Tk window
-    canvas: The shared canvas
-    on_return: Function to go back to the Selection Menu
+    current_user: The username of the person logged in
     """
     # 1. Clear previous drawings
     canvas.delete("all")
@@ -42,6 +41,14 @@ def load_conversion_ui(root, canvas, on_return):
                 result_text = f"{val / 1000} g"
                 
             label_result.config(text=result_text, fg="black")
+
+            # --- 3. SAVE TO HISTORY ---
+            save_to_history(
+                current_user, 
+                f"Conversion ({choice})", 
+                f"Input: {val}", 
+                result_text
+            )
             
         except ValueError:
             messagebox.showerror("Invalid Input", "Please enter a valid number.")
@@ -57,7 +64,6 @@ def load_conversion_ui(root, canvas, on_return):
     )
 
     # --- Input Section ---
-    # Dropdown for Conversion Type
     canvas.create_text(25.0, 100.0, anchor="nw", text="Select Conversion:", font=("Arial", 16 * -1))
     options = ["kg to lbs", "lbs to kg", "mg to g"]
     conversion_var = tk.StringVar(root)

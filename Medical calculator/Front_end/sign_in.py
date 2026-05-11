@@ -10,26 +10,28 @@ def relative_to_assets(path: str) -> Path:
 
 def load_sign_in_ui(root, canvas, on_create_click, on_signin_click):
     canvas.delete("all")
+    # Keep global references so images don't vanish
     global entry_image_1, entry_image_2, button_image_1, button_image_2
 
     # --- Header ---
     canvas.create_rectangle(0.0, 0.0, 772.0, 67.0, fill="#5F1C1C", outline="")
     canvas.create_text(40.0, 33.0, anchor="w", text="Medical calculator", fill="#FFFFFF", font=("Arial", 30 * -1))
 
-    # --- Username ---
+    # --- Username Section ---
     canvas.create_text(29.0, 97.0, anchor="nw", text="Username:", font=("Arial", 25 * -1))
     entry_image_1 = PhotoImage(file=relative_to_assets("entry_1.png"))
     canvas.create_image(387.0, 158.0, image=entry_image_1)
     
-    entry_user = Entry(bd=0, bg="#D9D9D9", font=("Arial", 16))
+    # Adding 'root' as the first argument ensures the entry stays visible
+    entry_user = Entry(root, bd=0, bg="#D9D9D9", font=("Arial", 16))    
     entry_user.place(x=43.0, y=136.0, width=688.0, height=42.0)
 
-    # --- Password ---
+    # --- Password Section ---
     canvas.create_text(29.0, 195.0, anchor="nw", text="Password:", font=("Arial", 25 * -1))
     entry_image_2 = PhotoImage(file=relative_to_assets("entry_2.png"))
     canvas.create_image(386.0, 256.0, image=entry_image_2)
     
-    entry_pass = Entry(bd=0, bg="#D9D9D9", show="*", font=("Arial", 16))
+    entry_pass = Entry(root, bd=0, bg="#D9D9D9", show="*", font=("Arial", 16))
     entry_pass.place(x=42.0, y=234.0, width=688.0, height=42.0)
 
     # --- Login Logic ---
@@ -38,15 +40,17 @@ def load_sign_in_ui(root, canvas, on_create_click, on_signin_click):
         password = entry_pass.get()
         
         if check_login(username, password):
-            on_signin_click() # Moves to Menu
+            # SUCCESS: Pass the username back to Main.py
+            on_signin_click(username) 
         else:
+            # FIXED: Removed the extra closing parenthesis that was here
             messagebox.showerror("Error", "Invalid Username or Password")
 
     # --- Buttons ---
     button_image_1 = PhotoImage(file=relative_to_assets("button_1.png"))
-    button_1 = Button(image=button_image_1, borderwidth=0, command=handle_login, relief="flat")
+    button_1 = Button(root, image=button_image_1, borderwidth=0, command=handle_login, relief="flat")
     button_1.place(x=590.0, y=318.0, width=141.0, height=42.0)
 
     button_image_2 = PhotoImage(file=relative_to_assets("button_2.png"))
-    button_2 = Button(image=button_image_2, borderwidth=0, command=on_create_click, relief="flat")
+    button_2 = Button(root, image=button_image_2, borderwidth=0, command=on_create_click, relief="flat")
     button_2.place(x=42.0, y=325.0, width=229.0, height=35.0)
