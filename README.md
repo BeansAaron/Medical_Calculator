@@ -1,4 +1,4 @@
-# Medical Calculator Suite
+# Medical Calculator Suite:
 
 A robust, desktop-based clinical tool built with **Python** and **Tkinter**, designed to assist healthcare students and professionals in performing high-accuracy calculations for IV therapy and medication titration.
 
@@ -6,7 +6,7 @@ This suite provides essential calculation tools secured behind a custom user aut
 
 ---
 
-## 🚀 Features
+##  Features:
 
 * **User Authentication**: Secure Sign-In and Account Creation using a JSON-based local database.
 * **IV Flow Rate**: Calculate Macro (DF:20) and Micro (DF:60) drops per minute.
@@ -17,7 +17,7 @@ This suite provides essential calculation tools secured behind a custom user aut
 
 ---
 
-## 📁 Project Structure
+##  Project Structure:
 
 The project follows a **Modular Architecture** to keep the code clean and maintainable:
 
@@ -33,7 +33,7 @@ The project follows a **Modular Architecture** to keep the code clean and mainta
 
 ---
 
-## 🛠️ Installation & Setup
+##  Installation & Setup:
 
 1.  **Prerequisites**: Ensure you have **Python 3.x** installed.
 2.  **Clone/Download**: Download all project files and maintain the folder structure (Back_end, Front_end, assets).
@@ -45,7 +45,7 @@ The project follows a **Modular Architecture** to keep the code clean and mainta
 
 ---
 
-## 📊 Technical Details
+##  Technical Details:
 
 * **GUI Framework**: Tkinter
 * **Data Storage**: Flat-file JSON (`accounts.json`).
@@ -53,7 +53,7 @@ The project follows a **Modular Architecture** to keep the code clean and mainta
 
 ---
 
-## 📝 Usage
+##  Usage:
 
 1.  **Start**: Launch the app and select "Create Account" if you are a new user.
 2.  **Access**: Log in with your registered credentials.
